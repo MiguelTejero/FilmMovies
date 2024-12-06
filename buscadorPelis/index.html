@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search of Movies</title>
+    <link rel="stylesheet" href="styles.css">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+</head>
+<body>
+    <style>
+
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        background-color: black;
+        color: #333;
+    }
+
+    header {
+        background: #333;
+        color: #fff;
+        padding: 1rem;
+        text-align: center;
+    }
+
+    header h1 {
+        margin: 0;
+        font-size: 2rem;
+    }
+
+    .search-controls {
+        margin-top: 1rem;
+    }
+
+    .search-controls input[type="text"] {
+        padding: 0.5rem;
+        width: 50%;
+        max-width: 400px;
+        margin: 0.5rem 0;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+
+    .search-controls button {
+        padding: 0.5rem 1rem;
+        margin: 0.5rem;
+        background: #08d101;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .search-controls button:hover {
+        background: #054a06;
+    }
+
+    main {
+        padding: 1rem;
+        background-color: black;
+    }
+
+    #resultados ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    #resultados ul li {
+        margin: 1rem 0;
+        background: #333;
+        border: 1px solid #ddd;
+        padding: 1rem;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        transition: box-shadow 0.3s ease;
+    }
+
+    .pelicula img {
+        width: 50px;
+        height: 75px;
+        object-fit: cover;
+        margin-right: 1rem;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+    }
+
+    .pelicula h3 {
+        margin: 0;
+        font-size: 1.2rem;
+    }
+
+    .pelicula p {
+        margin: 0.5rem 0 0;
+        color: #555;
+    }
+
+    #detallesPelicula {
+        position: fixed;
+        top: 10%;
+        left: 50%;
+        transform: translate(-50%, 0);
+        background: #fff;
+        padding: 1rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        width: 90%;
+        max-width: 500px;
+    }
+
+    #detallesPelicula h2 {
+        margin: 0;
+        margin-bottom: 1rem;
+    }
+
+    #detallesPelicula .cerrar {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: #08d101;
+        color: #fff;
+        border: none;
+        padding: 0.3rem 0.5rem;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+
+    #informeContainer {
+        position: fixed;
+        top: 10%;
+        left: 50%;
+        transform: translate(-50%, 0);
+        background: #fff;
+        padding: 1rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        width: 90%;
+        max-width: 600px;
+    }
+
+    #informeContainer .cerrarInforme {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: #08d101;
+        color: #fff;
+        border: none;
+        padding: 0.3rem 0.5rem;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+
+    footer {
+        text-align: center;
+        padding: 1rem;
+        background: #333;
+        color: #fff;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+    }
+
+    footer button {
+        padding: 0.5rem 1rem;
+        background: #08d101;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    footer button:hover {
+        background: #054a06;
+    }
+    .resultado-info {
+    margin-top: 10px;
+    text-align: center;
+}
+
+#resultados {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+#resultados ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    width: 100%;
+}
+
+#resultados ul li {
+    flex: 1 1 18%; 
+    box-sizing: border-box;
+    background: #fff;
+    border: 1px solid #ddd;
+    padding: 1rem;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    transition: box-shadow 0.3s ease;
+}
+
+#resultados ul li:hover {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.pelicula img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    margin-bottom: 1rem;
+    border-radius: 5px;
+}
+
+    </style>
+    <header>
+        <h1>Search of Movies</h1>
+        <div class="search-controls">
+            <input type="text" id="cajatexto" placeholder="Escribe para buscar...">
+            <button id="btnPeliculas">Movies</button>
+            <button id="btnSeries">Series</button>
+        </div>
+        <div class="resultado-info">
+            <p id="numeroResultados">Resultados: 0</p>
+        </div>
+        
+    </header>
+    <main>
+        <div id="resultados">
+        </div>
+    </main>
+    <section id="detallesPelicula" style="display: none;">
+        <button class="cerrar">Close</button>
+        <h2 id="tituloPelicula"></h2>
+        <p id="añoPelicula"></p>
+        <p id="directorPelicula"></p>
+        <p id="actoresPelicula"></p>
+        <p id="sinopsisPelicula"></p>
+    </section>
+    <section id="informeContainer" style="display: none;">
+        <button class="cerrarInforme">Close</button>
+    </section>
+    <footer>
+        <button id="crearInforme" style="display: none;">generate report
+        </button>
+    </footer>
+    <script src="index.js"></script>
+</body>
+</html>
+
+
